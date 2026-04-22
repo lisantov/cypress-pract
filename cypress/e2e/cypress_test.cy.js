@@ -46,7 +46,7 @@ describe('Cypress tests', () => {
                 .type(data.employer_login)
 
             cy.get('input.form-input--password.form-input[type="password"]')
-                .type(data.password);
+                .type(data.employer_password);
 
             cy.log('Отправка формы')
             cy.get('.login-form__button button[type="submit"]')
@@ -65,7 +65,7 @@ describe('Cypress tests', () => {
                 .type(data.student_login)
 
             cy.get('input.form-input--password.form-input[type="password"]')
-                .type(data.password);
+                .type(data.student_password);
 
             cy.log('Отправка формы')
             cy.get('.login-form__button button[type="submit"]')
@@ -277,6 +277,46 @@ describe('Cypress tests', () => {
                 .click()
 
             cy.contains('.status-close__text', 'Стажировка пройдена')
+                .should('exist')
+        })
+    })
+
+    it('Корректная валидация при регистрации', () => {
+        cy.fixture('cypressTests').then(data => {
+            cy.log('Переход на страницу регистрации')
+            cy.visit(pages(data).guest.register);
+
+            cy.log('Заполнение формы')
+            cy.get(':nth-child(1) > :nth-child(1) > .form-control--medium > .form-input--text')
+                .type('   ')
+
+            cy.wait(1000)
+
+            cy.contains('.form-error > span', 'Обязательное поле, символы латиницы, не содержит пробелы')
+                .should('exist')
+
+            cy.get('.form-input--email')
+                .type('kakashki');
+
+            cy.wait(1000)
+
+            cy.contains('.form-error > span', 'Обязательное поле, некорректная почта')
+                .should('exist')
+
+            cy.get(':nth-child(3) > .form-control--medium > .form-input--password')
+                .type('1');
+
+            cy.wait(1000)
+
+            cy.contains('.form-error > span', 'Обязательное поле, мин 6 символов, должен содержать буквы в верхнем и нижнем регистре, минимум 1 цифру, не содержать пробелы')
+                .should('exist')
+
+            cy.get(':nth-child(4) > .form-control--medium > .form-input--password')
+                .type('2');
+
+            cy.wait(1000)
+
+            cy.contains('.form-error > span', 'Пароли не совпадают')
                 .should('exist')
         })
     })

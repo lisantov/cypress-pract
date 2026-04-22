@@ -1,6 +1,7 @@
 {
   "main_url": "https://dev.profteam.su",
   "employer_login": "testerEmployer",
+  "employer_password": "Password1",
   "student_login": "lisantov",
-  "password": "Password1"
+  "student_password": "Password1"
 }
